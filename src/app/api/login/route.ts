@@ -1,5 +1,5 @@
-import { API_URL } from "@/const/env";
 import axios from "axios";
+import { API_URL } from "@/const/env";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
@@ -12,28 +12,37 @@ export async function POST(request: NextRequest) {
       },
     })
     .then((response) => {
-      return Response.json(
+      const res = NextResponse.json(
         {
           data: {
             message: "OK",
-            ...response?.data,
           },
         },
         {
           status: response?.status,
+          statusText: "login successfully",
         }
       );
+
+      res.cookies.set({
+        name: "jwt",
+        value: response?.data?.token,
+        maxAge: 60 * 60 * 24,
+        httpOnly: true,
+      });
+
+      return res;
     })
     .catch((reason) => {
-      return Response.json(
+      return NextResponse.json(
         {
           data: {
-            message: "FAILED",
-            error: reason?.response?.data,
+            message: reason?.response?.data,
           },
         },
         {
           status: reason?.status,
+          statusText: "login failed",
         }
       );
     });
