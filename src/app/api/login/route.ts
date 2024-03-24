@@ -14,9 +14,7 @@ export async function POST(request: NextRequest) {
     .then((response) => {
       const res = NextResponse.json(
         {
-          data: {
-            message: "OK",
-          },
+          message: "OK",
         },
         {
           status: response?.status,
@@ -36,9 +34,7 @@ export async function POST(request: NextRequest) {
     .catch((reason) => {
       return NextResponse.json(
         {
-          data: {
-            message: reason?.response?.data,
-          },
+          message: reason?.response?.data,
         },
         {
           status: reason?.status,

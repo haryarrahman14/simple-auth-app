@@ -50,7 +50,7 @@ const Register = () => {
     onSubmit: (values) => {
       mutate(values, {
         onSuccess: (response: any) => {
-          if (response?.data?.message === "OK") {
+          if (response?.message === "OK") {
             snackbarShowMessage("Register Success", "success", 3000);
             return router.push("/login");
           }

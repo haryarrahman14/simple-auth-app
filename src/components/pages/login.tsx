@@ -35,12 +35,12 @@ const Login = () => {
     onSubmit: (values) => {
       mutate(values, {
         onSuccess: (response: any) => {
-          if (response?.data?.message === "OK") {
+          if (response?.message === "OK") {
             snackbarShowMessage("Login Success", "success", 3000);
             return router.push("/");
           }
 
-          snackbarShowMessage(response?.data?.message, "error", 3000);
+          snackbarShowMessage(response?.message, "error", 3000);
         },
       });
     },
