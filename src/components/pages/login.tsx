@@ -8,7 +8,8 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { postLogin } from "@/client/login";
+import { postLogin } from "@/client/api/login";
+import { usePostLogin } from "@/hooks/client/login";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -19,15 +20,21 @@ const validationSchema = yup.object({
 });
 
 const Login = () => {
+  const { mutate } = usePostLogin();
+
   const formik = useFormik({
     initialValues: {
       username: "",
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      await postLogin();
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: (values) => {
+      mutate(values, {
+        onSuccess: (data) => {
+          console.log({ data });
+        },
+      });
+      //   alert(JSON.stringify(values, null, 2));
     },
   });
 

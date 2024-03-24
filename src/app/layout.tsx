@@ -5,6 +5,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import RootStyleRegistry from "@/components/utils/RootStyleRegistry";
 
 import local from "next/font/local";
+import { ReactQueryClientProvider } from "@/context/ReactQueryClientProvider";
 
 const mona = local({
   src: [
@@ -27,12 +28,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${mona.className}`}>
-        <AppRouterCacheProvider>
-          <RootStyleRegistry>{children}</RootStyleRegistry>
-        </AppRouterCacheProvider>
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en">
+        <body className={`${mona.className}`}>
+          <AppRouterCacheProvider>
+            <RootStyleRegistry>{children}</RootStyleRegistry>
+          </AppRouterCacheProvider>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
