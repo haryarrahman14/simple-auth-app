@@ -12,20 +12,25 @@ import Typography from "@mui/material/Typography";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 
+import DropdownCategories from "@/components/shared/DropdownCategories";
 import { Product } from "@/client/models/products";
 import { useState } from "react";
 
 const TOTAL_PRODUCT = 20;
-const MAXIMUM_PAGE = 4;
 
 const Products = () => {
+  const [category, setCategory] = useState<string>("");
   const [page, setPage] = useState<number>(1);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     setPage(value);
   };
 
   const { isLoading, data } = useGetProducts({
     limit: TOTAL_PRODUCT,
+    category: category,
   });
 
   const products = data?.data?.slice((page - 1) * 6, page * 6);
@@ -33,20 +38,33 @@ const Products = () => {
   return (
     <Box
       sx={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <Typography
-        variant="h4"
+      <Box
         sx={{
-          fontWeight: 700,
-          textTransform: "uppercase",
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
           marginBottom: "30px",
         }}
       >
-        Products
-      </Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 700,
+            textTransform: "uppercase",
+          }}
+        >
+          Products
+        </Typography>
+
+        <DropdownCategories onChange={setCategory} />
+      </Box>
 
       <Grid
         container
@@ -77,7 +95,11 @@ const Products = () => {
           marginX: "auto",
         }}
       >
-        <Pagination count={MAXIMUM_PAGE} page={page} onChange={handleChange} />
+        <Pagination
+          count={Math.ceil((data?.data?.length || 0) / 6)}
+          page={page}
+          onChange={handleChangePage}
+        />
       </Stack>
     </Box>
   );

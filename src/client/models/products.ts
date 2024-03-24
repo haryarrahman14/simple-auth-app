@@ -3,6 +3,7 @@ import { ResponseGlobal } from "./globals";
 export interface ProductsParams {
   limit?: number;
   sort?: "asc" | "desc";
+  category?: string;
 }
 
 export interface Product {
@@ -16,4 +17,8 @@ export interface Product {
 
 export interface ProductsResponse extends ResponseGlobal {
   data: Product[];
+}
+
+export interface ProductsCategoriesResponse extends ResponseGlobal {
+  data: string[];
 }
