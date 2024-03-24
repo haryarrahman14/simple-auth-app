@@ -20,9 +20,13 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import CircularProgress from "@mui/material/CircularProgress";
+import InventoryIcon from "@mui/icons-material/Inventory";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 import { useState } from "react";
 import { usePostLogout } from "@/hooks/client/logout";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const drawerWidth = 240;
 
@@ -75,11 +79,40 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
+const NavigationList = [
+  {
+    text: "Products",
+    href: "/products",
+    icon: (
+      <InventoryIcon
+        sx={{
+          width: "16px",
+          height: "16px",
+        }}
+      />
+    ),
+  },
+  {
+    text: "Carts",
+    href: "/carts",
+    icon: (
+      <ShoppingCartIcon
+        sx={{
+          width: "16px",
+          height: "16px",
+        }}
+      />
+    ),
+  },
+];
+
 export default function layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+
   const theme = useTheme();
   const [open, setOpen] = useState<boolean>(false);
 
@@ -93,8 +126,9 @@ export default function layout({
     setOpen(false);
   };
 
+  console.log({ pathname });
   return (
-    <>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} elevation={0}>
         <Toolbar
@@ -159,28 +193,31 @@ export default function layout({
         </DrawerHeader>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
+          {NavigationList.map((item, index) => (
+            <Link
+              key={index}
+              href={item.href}
+              style={{ textDecoration: "none" }}
+            >
+              <ListItem>
+                <ListItemButton
+                  sx={{
+                    ...(item.href === pathname && {
+                      backgroundColor: "rgba(0, 0, 0, 0.04)",
+                    }),
+                  }}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText
+                    primary={item.text}
+                    sx={{
+                      fontSize: "14px",
+                      color: theme.palette.primary.main,
+                    }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </Link>
           ))}
         </List>
       </Drawer>
@@ -188,6 +225,6 @@ export default function layout({
         <DrawerHeader />
         {children}
       </Main>
-    </>
+    </Box>
   );
 }
