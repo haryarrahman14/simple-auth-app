@@ -11,7 +11,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { usePostLogin } from "@/hooks/client/login";
 import { useRouter } from "next/navigation";
-import { SnackbarShowMessage, withSnackbar } from "../HOC/SnackbarHOC";
+import { useSnackBar } from "@/context/SnackbarProvider";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -21,13 +21,10 @@ const validationSchema = yup.object({
     .required("Password is required"),
 });
 
-const Login = ({
-  snackbarShowMessage,
-}: {
-  snackbarShowMessage: SnackbarShowMessage;
-}) => {
+const Login = () => {
   const router = useRouter();
   const { mutate, isPending } = usePostLogin();
+  const { snackbarShowMessage } = useSnackBar();
 
   const formik = useFormik({
     initialValues: {
@@ -184,4 +181,4 @@ const Login = ({
   );
 };
 
-export default withSnackbar(Login);
+export default Login;

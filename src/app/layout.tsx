@@ -6,6 +6,7 @@ import RootStyleRegistry from "@/context/RootStyleRegistry";
 
 import local from "next/font/local";
 import { ReactQueryClientProvider } from "@/context/ReactQueryClientProvider";
+import { SnackBarProvider } from "@/context/SnackbarProvider";
 
 const mona = local({
   src: [
@@ -32,7 +33,9 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${mona.className}`}>
           <AppRouterCacheProvider>
-            <RootStyleRegistry>{children}</RootStyleRegistry>
+            <RootStyleRegistry>
+              <SnackBarProvider>{children}</SnackBarProvider>
+            </RootStyleRegistry>
           </AppRouterCacheProvider>
         </body>
       </html>
