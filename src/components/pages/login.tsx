@@ -5,21 +5,29 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { usePostLogin } from "@/hooks/client/login";
+import { useRouter } from "next/navigation";
+import { SnackbarShowMessage, withSnackbar } from "../HOC/SnackbarHOC";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
   password: yup
     .string()
-    .min(5, "Password should be of minimum 8 characters length")
+    .min(8, "Password should be of minimum 8 characters length")
     .required("Password is required"),
 });
 
-const Login = () => {
-  const { mutate } = usePostLogin();
+const Login = ({
+  snackbarShowMessage,
+}: {
+  snackbarShowMessage: SnackbarShowMessage;
+}) => {
+  const router = useRouter();
+  const { mutate, isPending } = usePostLogin();
 
   const formik = useFormik({
     initialValues: {
@@ -27,10 +35,15 @@ const Login = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: async (values) => {
+    onSubmit: (values) => {
       mutate(values, {
-        onSuccess: (data) => {
-          console.log({ data });
+        onSuccess: (response: any) => {
+          if (response?.data?.message === "OK") {
+            snackbarShowMessage("Login Success", "success", 3000);
+            return router.push("/");
+          }
+
+          snackbarShowMessage(response?.data?.message, "error", 3000);
         },
       });
     },
@@ -133,8 +146,16 @@ const Login = () => {
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
             />
-            <Button variant="contained" type="submit">
-              Sign In
+            <Button
+              disabled={isPending}
+              variant="contained"
+              type="submit"
+              sx={{
+                minHeight: "40px",
+                textTransform: "capitalize",
+              }}
+            >
+              {isPending ? <CircularProgress size="16px" /> : "Sign In"}
             </Button>
           </Box>
 
@@ -163,4 +184,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default withSnackbar(Login);
