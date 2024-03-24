@@ -91,6 +91,7 @@ const Login = () => {
               sx={{
                 minHeight: "64px",
               }}
+              placeholder="david_r"
               value={formik.values.username}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -105,6 +106,7 @@ const Login = () => {
               sx={{
                 minHeight: "64px",
               }}
+              placeholder="3478*#54"
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

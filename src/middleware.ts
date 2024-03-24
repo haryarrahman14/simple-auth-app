@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const protectedRoutes = ["/", "/products"];
+const unprotectedRoutes = ["/login", "/register"];
 
 export function middleware(request: NextRequest) {
   const isAuthenticated = request.cookies.get("jwt");
 
   if (!isAuthenticated && protectedRoutes.includes(request.nextUrl.pathname)) {
     const absoluteURL = new URL("/login", request.nextUrl.origin);
+    return NextResponse.redirect(absoluteURL.toString());
+  }
+
+  if (isAuthenticated && unprotectedRoutes.includes(request.nextUrl.pathname)) {
+    const absoluteURL = new URL("/", request.nextUrl.origin);
     return NextResponse.redirect(absoluteURL.toString());
   }
 
