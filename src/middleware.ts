@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const protectedRoutes = ["/"];
+const protectedRoutes = ["/", "/products"];
 
 export function middleware(request: NextRequest) {
   const isAuthenticated = request.cookies.get("jwt");
