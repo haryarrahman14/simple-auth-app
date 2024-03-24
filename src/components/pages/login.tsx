@@ -8,14 +8,13 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import * as yup from "yup";
 import { useFormik } from "formik";
-import { postLogin } from "@/client/api/login";
 import { usePostLogin } from "@/hooks/client/login";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
   password: yup
     .string()
-    .min(8, "Password should be of minimum 8 characters length")
+    .min(5, "Password should be of minimum 8 characters length")
     .required("Password is required"),
 });
 
@@ -28,13 +27,12 @@ const Login = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       mutate(values, {
         onSuccess: (data) => {
           console.log({ data });
         },
       });
-      //   alert(JSON.stringify(values, null, 2));
     },
   });
 
