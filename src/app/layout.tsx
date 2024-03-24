@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import RootStyleRegistry from "@/components/utils/RootStyleRegistry";
+import RootStyleRegistry from "@/context/RootStyleRegistry";
 
 import local from "next/font/local";
 import { ReactQueryClientProvider } from "@/context/ReactQueryClientProvider";

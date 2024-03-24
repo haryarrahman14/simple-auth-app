@@ -10,7 +10,7 @@ import local from "next/font/local";
 const mona = local({
   src: [
     {
-      path: "../../../public/fonts/Mona-Sans.woff2",
+      path: "../../public/fonts/Mona-Sans.woff2",
     },
   ],
   variable: "--font-mona-sans",
