@@ -4,6 +4,7 @@ import {
   ProductsParams,
   ProductsResponse,
 } from "../models/products";
+import { useMutation } from "@tanstack/react-query";
 
 export const getProducts = (
   params: ProductsParams
@@ -21,7 +22,17 @@ export const getProductsByCategory = (
   });
 };
 
+export const deleteProduct = (id: string): Promise<ProductsResponse> => {
+  return client.delete(`/api/products/${id}`);
+};
+
 export const getProductsCategories =
   (): Promise<ProductsCategoriesResponse> => {
     return client.get("/api/products/categories");
   };
+
+export const useDeleteProduct = () => {
+  return useMutation({
+    mutationFn: (id: string) => deleteProduct(id),
+  });
+};
