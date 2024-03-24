@@ -65,38 +65,6 @@ const Login = () => {
             flexDirection: "column",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              marginBottom: "12px",
-              gap: "4px",
-              cursor: "pointer",
-              transition: "all",
-              transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-              transitionDuration: "150ms",
-              ":hover": {
-                gap: "8px",
-              },
-            }}
-          >
-            <KeyboardBackspaceIcon
-              sx={{
-                fontSize: "10px",
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: "10px",
-                color: "#0d0c22",
-                fontWeight: "700",
-              }}
-            >
-              Back to Home
-            </Typography>
-          </Box>
-
           <Typography
             sx={{
               fontSize: "24px",
