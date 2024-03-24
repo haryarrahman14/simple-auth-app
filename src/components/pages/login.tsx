@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import * as yup from "yup";
@@ -12,6 +11,7 @@ import { useFormik } from "formik";
 import { usePostLogin } from "@/hooks/client/login";
 import { useRouter } from "next/navigation";
 import { useSnackBar } from "@/context/SnackbarProvider";
+import Link from "next/link";
 
 const validationSchema = yup.object({
   username: yup.string().required("Username is required"),
@@ -133,15 +133,15 @@ const Login = () => {
             }}
           >
             Don't have an account?{" "}
-            <a
-              href=""
+            <Link
+              href="/register"
               style={{
                 color: "#3d3d4e",
                 textDecoration: "underline",
               }}
             >
-              Sign up
-            </a>
+              Sign Up
+            </Link>
           </Typography>
         </Box>
       </form>
