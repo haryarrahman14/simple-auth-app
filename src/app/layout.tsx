@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import RootStyleRegistry from "@/components/utils/RootStyleRegistry";
 
-const inter = Inter({ subsets: ["latin"] });
+import local from "next/font/local";
+
+const mona = local({
+  src: [
+    {
+      path: "../../public/fonts/Mona-Sans.woff2",
+      weight: "800",
+    },
+  ],
+  variable: "--font-mona-sans",
+});
 
 export const metadata: Metadata = {
   title: "Simple Auth App",
@@ -18,8 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+      <body className={`${mona.className}`}>
+        <AppRouterCacheProvider>
+          <RootStyleRegistry>{children}</RootStyleRegistry>
+        </AppRouterCacheProvider>
       </body>
     </html>
   );
