@@ -1,10 +1,5 @@
-"use client";
-
-import { useGetProducts } from "@/hooks/client/products";
+import Products from "@/components/pages/products";
 
 export default function ProductsPage() {
-  useGetProducts({
-    limit: 5,
-  });
-  return <>TEST AJJA</>;
+  return <Products />;
 }

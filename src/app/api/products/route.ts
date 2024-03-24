@@ -28,9 +28,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           message: "OK",
-          data: {
-            ...response?.data,
-          },
+          data: response?.data,
         },
         {
           status: response?.status,

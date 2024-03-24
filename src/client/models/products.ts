@@ -1,9 +1,11 @@
+import { ResponseGlobal } from "./globals";
+
 export interface ProductsParams {
   limit?: number;
   sort?: "asc" | "desc";
 }
 
-export interface Products {
+export interface Product {
   id: number;
   title: string;
   price: string;
@@ -12,4 +14,6 @@ export interface Products {
   image: string;
 }
 
-export type ProductsResponse = Products[];
+export interface ProductsResponse extends ResponseGlobal {
+  data: Product[];
+}

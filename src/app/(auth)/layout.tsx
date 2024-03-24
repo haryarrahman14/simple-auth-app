@@ -17,8 +17,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import CircularProgress from "@mui/material/CircularProgress";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -126,7 +124,6 @@ export default function layout({
     setOpen(false);
   };
 
-  console.log({ pathname });
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -154,7 +151,7 @@ export default function layout({
           >
             <Button
               disabled={isPending}
-              size="small"
+              size="medium"
               variant="outlined"
               onClick={() => {
                 mutate();
