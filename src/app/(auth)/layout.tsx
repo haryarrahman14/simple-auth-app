@@ -104,7 +104,7 @@ const NavigationList = [
   },
 ];
 
-export default function layout({
+export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;

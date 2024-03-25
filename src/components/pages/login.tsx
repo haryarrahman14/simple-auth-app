@@ -134,7 +134,7 @@ const Login = () => {
               fontWeight: "500",
             }}
           >
-            Don't have an account?{" "}
+            Dont have an account?{" "}
             <Link
               href="/register"
               style={{

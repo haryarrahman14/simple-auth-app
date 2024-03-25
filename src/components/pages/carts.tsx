@@ -346,7 +346,7 @@ const Carts = () => {
                 product: { productId: number; quantity: number },
                 idx: number
               ) => (
-                <Grid key={idx} item lg={4} md={6} xs={12}>
+                <Grid key={idx} item lg={6} md={6} xs={12}>
                   <CardProductQuantity
                     id={`${product.productId}`}
                     quantity={product.quantity}

@@ -19,17 +19,10 @@ export const useGetProducts = (
 ) => {
   const queryKey = queries.products.list(params).queryKey;
 
-  if (params?.category) {
-    return useQuery<ProductsResponse, Error>({
-      queryKey,
-      queryFn: () => getProductsByCategory(params),
-      ...options,
-    });
-  }
-
   return useQuery<ProductsResponse, Error>({
     queryKey,
-    queryFn: () => getProducts(params),
+    queryFn: () =>
+      params?.category ? getProductsByCategory(params) : getProducts(params),
     ...options,
   });
 };
