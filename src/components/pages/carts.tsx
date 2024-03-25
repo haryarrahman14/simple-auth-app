@@ -20,11 +20,16 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import Grid from "@mui/material/Grid";
 
+import dayjs, { Dayjs } from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import { useGetCarts } from "@/hooks/client/carts";
 import React, { useMemo, useState } from "react";
 import { Cart } from "@/client/models/carts";
 import { useGetUsersDetail } from "@/hooks/client/users";
-import dayjs from "dayjs";
 import { CardProductQuantity } from "../shared/CardProductQuantity";
 
 interface Column {
@@ -80,20 +85,26 @@ const TableCellDate: React.FC<{
 };
 
 const Carts = () => {
-  const { data } = useGetCarts({});
-
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [dateRange, setDateRange] = React.useState<{
+    startdate: Dayjs | null;
+    enddate: Dayjs | null;
+  }>({
+    startdate: null,
+    enddate: null,
+  });
+
+  const { data } = useGetCarts({
+    startdate: dateRange?.startdate
+      ? dayjs(dateRange?.startdate).format("YYYY-MM-DD")
+      : "",
+    enddate: dateRange?.enddate
+      ? dayjs(dateRange?.enddate).format("YYYY-MM-DD")
+      : "",
+  });
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
   };
 
   const [popUpProducts, setPopUpProducts] = useState<Cart["products"]>([]);
@@ -105,6 +116,8 @@ const Carts = () => {
   const handleClose = () => {
     setPopUpProducts([]);
   };
+
+  const carts = data?.data?.slice(page * 5, (page + 1) * 5);
 
   return (
     <>
@@ -135,7 +148,59 @@ const Carts = () => {
             Carts
           </Typography>
 
-          {/* <DropdownCategories onChange={() => {}} /> */}
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DatePicker", "DatePicker"]}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "8px",
+                }}
+              >
+                <DatePicker
+                  slotProps={{
+                    field: {
+                      clearable: true,
+                      onClear: () =>
+                        setDateRange({
+                          ...dateRange,
+                          startdate: null,
+                        }),
+                    },
+                  }}
+                  label="Start Date"
+                  value={dateRange.startdate}
+                  onChange={(newValue) =>
+                    setDateRange({
+                      ...dateRange,
+                      startdate: newValue,
+                    })
+                  }
+                />
+
+                <DatePicker
+                  slotProps={{
+                    field: {
+                      clearable: true,
+                      onClear: () =>
+                        setDateRange({
+                          ...dateRange,
+                          enddate: null,
+                        }),
+                    },
+                  }}
+                  label="End Date"
+                  value={dateRange.enddate}
+                  onChange={(newValue) =>
+                    setDateRange({
+                      ...dateRange,
+                      enddate: newValue,
+                    })
+                  }
+                />
+              </Box>
+            </DemoContainer>
+          </LocalizationProvider>
         </Box>
 
         <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -155,7 +220,7 @@ const Carts = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data?.data?.map((cart: Cart, idx) => (
+                {carts?.map((cart: Cart, idx) => (
                   <TableRow
                     hover
                     role="checkbox"
@@ -184,11 +249,10 @@ const Carts = () => {
           <TablePagination
             rowsPerPageOptions={[5]}
             component="div"
-            count={0}
-            rowsPerPage={rowsPerPage}
+            count={data?.data?.length || 0}
+            rowsPerPage={5}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
       </Box>

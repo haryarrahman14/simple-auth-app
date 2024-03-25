@@ -16,8 +16,6 @@ import DropdownCategories from "@/components/shared/DropdownCategories";
 import { Product } from "@/client/models/products";
 import { useState } from "react";
 
-const TOTAL_PRODUCT = 20;
-
 const Products = () => {
   const [category, setCategory] = useState<string>("");
   const [page, setPage] = useState<number>(1);
@@ -29,7 +27,6 @@ const Products = () => {
   };
 
   const { isLoading, isFetching, data } = useGetProducts({
-    limit: TOTAL_PRODUCT,
     category: category,
   });
 
