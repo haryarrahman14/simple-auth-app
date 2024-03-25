@@ -1,5 +1,3 @@
-## Deployment
-https://simple-auth-app.vercel.app/login
 
 ## Test Account
 - username : david_r
