@@ -15,6 +15,10 @@ export interface Product {
   image: string;
 }
 
+export interface ProductResponse extends ResponseGlobal {
+  data: Product;
+}
+
 export interface ProductsResponse extends ResponseGlobal {
   data: Product[];
 }

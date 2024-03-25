@@ -1,5 +1,7 @@
 import client from "./client";
 import {
+  Product,
+  ProductResponse,
   ProductsCategoriesResponse,
   ProductsParams,
   ProductsResponse,
@@ -12,6 +14,10 @@ export const getProducts = (
   return client.get("/api/products", {
     params,
   });
+};
+
+export const getProductDetail = (id: string): Promise<ProductResponse> => {
+  return client.get(`/api/products/${id}`);
 };
 
 export const getProductsByCategory = (

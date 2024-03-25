@@ -1,10 +1,12 @@
 import queries from "@/const/queries";
 import {
+  getProductDetail,
   getProducts,
   getProductsByCategory,
   getProductsCategories,
 } from "@/client/api/products";
 import {
+  ProductResponse,
   ProductsCategoriesResponse,
   ProductsParams,
   ProductsResponse,
@@ -28,6 +30,19 @@ export const useGetProducts = (
   return useQuery<ProductsResponse, Error>({
     queryKey,
     queryFn: () => getProducts(params),
+    ...options,
+  });
+};
+
+export const useGetProductDetail = (
+  id: string,
+  options?: Omit<UseQueryOptions<ProductResponse>, "queryKey" | "queryFn">
+) => {
+  const queryKey = queries.products.detail(id).queryKey;
+
+  return useQuery<ProductResponse, Error>({
+    queryKey,
+    queryFn: () => getProductDetail(id),
     ...options,
   });
 };

@@ -5,6 +5,7 @@ import { CartsParams } from "@/client/models/carts";
 const queries = createQueryKeyStore({
   products: {
     list: (params: ProductsParams) => [params],
+    detail: (id: string) => [id],
     categories: ["categories"],
   },
   carts: {
