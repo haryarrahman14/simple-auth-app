@@ -3,24 +3,24 @@ import { API_URL } from "@/const/env";
 import { NextRequest, NextResponse } from "next/server";
 import { ProductsParams } from "@/client/models/products";
 
-export async function GET(request: NextRequest) {
-  const category = request.nextUrl.searchParams.get("category");
+export async function GET(request: NextRequest, { params }: any) {
+  const { category } = params;
   const limit = request.nextUrl.searchParams.get("limit");
   const sort = request.nextUrl.searchParams.get("sort");
 
-  let params: ProductsParams = {};
+  let param: ProductsParams = {};
 
   if (limit) {
-    params.limit = parseInt(limit);
+    param.limit = parseInt(limit);
   }
 
   if (sort && ["asc", "desc"].includes(sort)) {
-    params.sort = sort as ProductsParams["sort"];
+    param.sort = sort as ProductsParams["sort"];
   }
 
   return await axios
     .get(`${API_URL}/products/category/${category}`, {
-      params,
+      params: param,
       headers: {
         "Content-Type": "application/json",
       },
