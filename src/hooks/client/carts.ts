@@ -1,7 +1,11 @@
 import queries from "@/const/queries";
-import { UseQueryOptions, useQuery } from "@tanstack/react-query";
-import { CartsParams, CartsResponse } from "@/client/models/carts";
-import { getCarts } from "@/client/api/carts";
+import { UseQueryOptions, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  CartsParams,
+  CartsResponse,
+  PostCartBody,
+} from "@/client/models/carts";
+import { getCarts, postCart } from "@/client/api/carts";
 
 export const useGetCarts = (
   params: CartsParams,
@@ -13,5 +17,11 @@ export const useGetCarts = (
     queryKey,
     queryFn: () => getCarts(params),
     ...options,
+  });
+};
+
+export const usePostCart = () => {
+  return useMutation({
+    mutationFn: (body: PostCartBody) => postCart(body),
   });
 };

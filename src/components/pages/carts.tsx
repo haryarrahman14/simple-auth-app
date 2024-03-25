@@ -12,13 +12,12 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Skeleton from "@mui/material/Skeleton";
 import Button from "@mui/material/Button";
-
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-
 import Grid from "@mui/material/Grid";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import dayjs, { Dayjs } from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -26,11 +25,18 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { useGetCarts } from "@/hooks/client/carts";
-import React, { useMemo, useState } from "react";
+import { useGetCarts, usePostCart } from "@/hooks/client/carts";
+import React, { useState } from "react";
 import { Cart } from "@/client/models/carts";
 import { useGetUsersDetail } from "@/hooks/client/users";
 import { CardProductQuantity } from "../shared/CardProductQuantity";
+
+import * as yup from "yup";
+import { useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useSnackBar } from "@/context/SnackbarProvider";
+import { useGetProducts } from "@/hooks/client/products";
+import DropdownProducts from "../shared/DropdownProducts";
 
 interface Column {
   id: "name" | "date" | "products";
@@ -119,6 +125,51 @@ const Carts = () => {
 
   const carts = data?.data?.slice(page * 5, (page + 1) * 5);
 
+  // ** CREATE CARTS **
+  const [openModalCreate, setOpenModalCreate] = useState<boolean>(false);
+
+  const router = useRouter();
+  const { snackbarShowMessage } = useSnackBar();
+  const { mutate, isPending } = usePostCart();
+
+  const validationSchema = yup.object({
+    products: yup
+      .array()
+      .of(
+        yup.object().shape({
+          productId: yup.number(),
+          quantity: yup.number(),
+        })
+      )
+      .compact((v) => !v.checked)
+      .min(1, "Products should be of minimum 1 product"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      products: [],
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      const body = {
+        ...values,
+        userId: 1,
+        date: dayjs().format("YYYY-MM-DDDD"),
+      };
+
+      mutate(body, {
+        onSuccess: (response: any) => {
+          if (response?.message === "OK") {
+            snackbarShowMessage("Create Success", "success", 3000);
+            return router.push("/");
+          }
+
+          snackbarShowMessage(response?.message, "error", 3000);
+        },
+      });
+    },
+  });
+
   return (
     <>
       <Box
@@ -138,15 +189,33 @@ const Carts = () => {
             marginBottom: "30px",
           }}
         >
-          <Typography
-            variant="h4"
+          <Box
             sx={{
-              fontWeight: 700,
-              textTransform: "uppercase",
+              display: "flex",
+              flexDirection: "row",
+              gap: "12px",
+              alignItems: "center",
             }}
           >
-            Carts
-          </Typography>
+            <Typography
+              variant="h4"
+              sx={{
+                fontWeight: 700,
+                textTransform: "uppercase",
+              }}
+            >
+              Carts
+            </Typography>
+            <Button
+              variant="outlined"
+              onClick={() => setOpenModalCreate(true)}
+              sx={{
+                textTransform: "capitalize",
+              }}
+            >
+              Create New
+            </Button>
+          </Box>
 
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DatePicker", "DatePicker"]}>
@@ -289,6 +358,59 @@ const Carts = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openModalCreate}
+        onClose={() => {
+          setOpenModalCreate(false);
+        }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">📝 Create Cart</DialogTitle>
+        <DialogContent>
+          <form>
+            <Box
+              sx={{
+                minWidth: "342px",
+                minHegith: "300px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                marginBottom: "16px",
+              }}
+            >
+              <Box sx={{ paddingY: "16px" }}>
+                <DropdownProducts
+                  onChange={(values) => {
+                    console.log({ values });
+                  }}
+                />
+              </Box>
+              <Button
+                disabled={isPending}
+                variant="contained"
+                type="submit"
+                sx={{
+                  minHeight: "40px",
+                  textTransform: "capitalize",
+                }}
+              >
+                {isPending ? <CircularProgress size="16px" /> : "Create"}
+              </Button>
+            </Box>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenModalCreate(false);
+            }}
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </>

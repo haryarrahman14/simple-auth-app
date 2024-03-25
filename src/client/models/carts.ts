@@ -17,3 +17,9 @@ export interface Cart {
 export interface CartsResponse extends ResponseGlobal {
   data: Cart[];
 }
+
+export interface PostCartBody {
+  userId: number;
+  date: string;
+  products: Cart["products"];
+}
