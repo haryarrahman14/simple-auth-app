@@ -10,6 +10,9 @@ const queries = createQueryKeyStore({
   carts: {
     list: (params: CartsParams) => [params],
   },
+  users: {
+    detail: (id: string) => [id],
+  },
 });
 
 export default queries;

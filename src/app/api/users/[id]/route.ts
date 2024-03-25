@@ -2,11 +2,11 @@ import axios from "axios";
 import { API_URL } from "@/const/env";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, { params }: any) {
+export async function GET(request: NextRequest, { params }: any) {
   const { id } = params;
 
   return await axios
-    .delete(`${API_URL}/products/${id}`, {
+    .get(`${API_URL}/users/${id}`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,6 +24,7 @@ export async function DELETE(request: NextRequest, { params }: any) {
       );
     })
     .catch((reason) => {
+      console.log({ reason });
       return NextResponse.json(
         {
           message: reason?.response?.data,

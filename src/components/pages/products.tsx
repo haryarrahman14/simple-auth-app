@@ -28,7 +28,7 @@ const Products = () => {
     setPage(value);
   };
 
-  const { isLoading, data } = useGetProducts({
+  const { isLoading, isFetching, data } = useGetProducts({
     limit: TOTAL_PRODUCT,
     category: category,
   });
@@ -73,11 +73,11 @@ const Products = () => {
           marginBottom: "30px",
         }}
       >
-        {isLoading
+        {isLoading || isFetching
           ? Array(6)
               .fill("")
               .map((_, idx) => (
-                <Grid key={idx} item lg={4}>
+                <Grid key={idx} item lg={4} md={6} xs={12}>
                   <CardProductSkeleton />
                 </Grid>
               ))

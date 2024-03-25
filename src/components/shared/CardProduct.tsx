@@ -17,6 +17,8 @@ import { Product } from "@/client/models/products";
 import { useState } from "react";
 import { useDeleteProduct } from "@/client/api/products";
 import { useSnackBar } from "@/context/SnackbarProvider";
+import { useQueryClient } from "@tanstack/react-query";
+import queries from "@/const/queries";
 
 export const CardProductSkeleton: React.FC = () => {
   return (
@@ -49,6 +51,7 @@ export const CardProduct: React.FC<Product> = ({
   description,
   image,
 }) => {
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useDeleteProduct();
   const { snackbarShowMessage } = useSnackBar();
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -69,6 +72,9 @@ export const CardProduct: React.FC<Product> = ({
         } else {
           snackbarShowMessage("Failed to remove product", "error", 2000);
         }
+        queryClient.refetchQueries({
+          queryKey: queries.products._def,
+        });
         handleClose();
       },
       onError: () => {
